@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    table {
+        @apply border-collapse w-full shadow-sm;
+    }
+
+    th {
+        @apply p-3 border border-gray-300 text-left bg-gray-50 font-medium;
+    }
+
+    td {
+        @apply p-3 border border-gray-300;
+    }
+
+}
