@@ -17,9 +17,11 @@ export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log("fetching advocates...");
+    setIsLoading(true);
     fetch("/api/advocates")
       .then((response) => response.json())
       .then((jsonResponse) => {
@@ -28,6 +30,9 @@ export default function Home() {
       })
       .catch((error) => {
         console.error("Error fetching advocates:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -80,36 +85,43 @@ export default function Home() {
       </div>
       <br />
       <br />
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th>Degree</th>
-            <th>Specialties</th>
-            <th>Years of Experience</th>
-            <th>Phone Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => (
-            <tr key={advocate.id}>
-              <td>{advocate.firstName}</td>
-              <td>{advocate.lastName}</td>
-              <td>{advocate.city}</td>
-              <td>{advocate.degree}</td>
-              <td>
-                {advocate.specialties.map((specialty, index) => (
-                  <div key={index}>{specialty}</div>
-                ))}
-              </td>
-              <td>{advocate.yearsOfExperience}</td>
-              <td>{advocate.phoneNumber}</td>
+      {isLoading ? (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <span className="ml-3 text-gray-600">Loading advocates...</span>
+        </div>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>City</th>
+              <th>Degree</th>
+              <th>Specialties</th>
+              <th>Years of Experience</th>
+              <th>Phone Number</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredAdvocates.map((advocate) => (
+              <tr key={advocate.id}>
+                <td>{advocate.firstName}</td>
+                <td>{advocate.lastName}</td>
+                <td>{advocate.city}</td>
+                <td>{advocate.degree}</td>
+                <td>
+                  {advocate.specialties.map((specialty, index) => (
+                    <div key={index}>{specialty}</div>
+                  ))}
+                </td>
+                <td>{advocate.yearsOfExperience}</td>
+                <td>{advocate.phoneNumber}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </main>
   );
 }
