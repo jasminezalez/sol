@@ -30,6 +30,8 @@ docker compose up -d
 
 3. Push migration to the database
 
+npm run generate in the terminal
+
 ```bash
 npx drizzle-kit push
 ```
